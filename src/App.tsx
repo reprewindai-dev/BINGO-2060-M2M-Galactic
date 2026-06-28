@@ -8,6 +8,7 @@ import { Player, BiometricResonance, LobbyState, GlobalJackpotState, Challenge, 
 import MFASection from './components/MFASection';
 import HolographicBoard from './components/HolographicBoard';
 import NeuralInterface from './components/NeuralInterface';
+import CommunalResonanceEngine from './components/CommunalResonanceEngine';
 import PaymentConsole from './components/PaymentConsole';
 import Leaderboard from './components/Leaderboard';
 import SharingHub from './components/SharingHub';
@@ -1161,6 +1162,15 @@ export default function App() {
               </div>
             </div>
           </div>
+
+          {/* Communal Resonance Engine */}
+          <CommunalResonanceEngine
+            playerResonance={resonance}
+            lobbyName={activeLobby.name}
+            activePlayersCount={activeLobby.activePlayers.length}
+            isGameActive={activeLobby.status === 'active'}
+            calledNumbersCount={activeLobby.calledNumbers.length}
+          />
 
           {/* Neural Link */}
           <NeuralInterface
