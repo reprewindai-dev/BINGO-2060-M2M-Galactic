@@ -14,7 +14,7 @@
     "@google/genai": "^2.4.0",
     "express": "^4.21.2",
     "dotenv": "^17.2.3",
-    "vite": "^5.4.11",
+    "vite": "^8.1.0",
     "esbuild": "^0.25.0"
   },
   "devDependencies": {
