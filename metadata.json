@@ -1,0 +1,6 @@
+{
+  "name": "BINGO 2060: M2M Galactic",
+  "description": "Futuristic BINGO with AI caller, holographic boards, neural link simulation, and Base Mainnet x402 payment rails.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
