@@ -6,7 +6,6 @@
 import express from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
-import { createServer as createViteServer } from 'vite';
 import { GoogleGenAI } from '@google/genai';
 import crypto from 'crypto';
 
@@ -139,8 +138,10 @@ function generateCardForLobby(seed: string): number[][] {
   for (let col = 0; col < 5; col++) {
     const colNums: number[] = [];
     const [min, max] = ranges[col];
+    let attempts = 0;
     while (colNums.length < 5) {
-      const rand = Math.sin(hashVal + colNums.length * (col + 1)) * 10000;
+      attempts++;
+      const rand = Math.sin(hashVal + colNums.length * (col + 1) + attempts) * 10000;
       const num = min + Math.floor((rand - Math.floor(rand)) * (max - min + 1));
       if (!colNums.includes(num)) {
         colNums.push(num);
@@ -812,21 +813,37 @@ app.get('/api/push/alerts', (req, res) => {
   res.json({ alerts: db.pushNotifications });
 });
 
+// Explicit health route for container verification and proxy gateway checks
+app.get('/health', (req, res) => {
+  res.json({ status: "healthy" });
+});
+
 // ================= SETUP VITE MIDDLEWARE =================
 
 async function startServer() {
   if (process.env.NODE_ENV !== 'production') {
+    const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), 'dist');
-    app.use(express.static(distPath));
-    app.get('*', (req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
+    app.get('/', (req, res) => {
+      res.json({ status: "online", service: "BINGO 2060 M2M Backend", time: new Date().toISOString() });
     });
+    const distPath = path.join(process.cwd(), 'dist');
+    const fs = await import('fs');
+    if (fs.existsSync(path.join(distPath, 'index.html'))) {
+      app.use(express.static(distPath));
+      app.get('*', (req, res) => {
+        res.sendFile(path.join(distPath, 'index.html'));
+      });
+    } else {
+      app.get('*', (req, res) => {
+        res.json({ status: "online", service: "BINGO 2060 M2M Backend (Frontend Decoupled)" });
+      });
+    }
   }
 
   app.listen(PORT, '0.0.0.0', () => {
