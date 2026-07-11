@@ -189,8 +189,8 @@ function currentState(): PersistedState {
 
 function applyState(state: PersistedState): void {
   if (!state || typeof state !== 'object') return;
-  if (Array.isArray(state.players)) db.players = state.players;
-  if (Array.isArray(state.lobbies)) db.lobbies = state.lobbies;
+  if (Array.isArray(state.players) && state.players.length > 0) db.players = state.players;
+  if (Array.isArray(state.lobbies) && state.lobbies.length > 0) db.lobbies = state.lobbies;
   if (Array.isArray(state.currentSelectionHistory)) db.currentSelectionHistory = state.currentSelectionHistory;
   if (Array.isArray(state.pushSubscriptions)) db.pushSubscriptions = state.pushSubscriptions;
   if (Array.isArray(state.pushNotifications)) db.pushNotifications = state.pushNotifications;
