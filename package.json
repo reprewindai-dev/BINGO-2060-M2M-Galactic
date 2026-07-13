@@ -18,7 +18,7 @@
     "esbuild": "^0.25.0",
     "express": "^4.21.2",
     "viem": "^2.55.1",
-    "vite": "^5.4.11",
+    "vite": "^6.4.3",
     "wagmi": "^2.19.5"
   },
   "devDependencies": {
