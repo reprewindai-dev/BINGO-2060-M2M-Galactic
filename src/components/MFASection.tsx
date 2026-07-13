@@ -18,14 +18,14 @@ export default function MFASection({ onAuthenticated }: MFASectionProps) {
   const [lobbySelected, setLobbySelected] = useState<string | null>(null);
 
   // Automatically attempt login when wallet is connected and username is provided
-  const handleNeuralLink = async (e?: React.FormEvent) => {
+  const handleLogin = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!isConnected || !address) {
       setError('Wallet must be connected first.');
       return;
     }
     if (!username.trim()) {
-      setError('Please provide a Neural Handle.');
+      setError('Please provide a Username.');
       return;
     }
 
@@ -43,10 +43,10 @@ export default function MFASection({ onAuthenticated }: MFASectionProps) {
       if (response.ok && data.status === 'authenticated') {
         onAuthenticated(data.player);
       } else {
-        setError(data.error || 'Authentication handshake failed.');
+        setError(data.error || 'Authentication failed.');
       }
     } catch (err) {
-      setError('Connection to security gateway timed out.');
+      setError('Connection timed out.');
     } finally {
       setLoading(false);
     }
@@ -54,18 +54,18 @@ export default function MFASection({ onAuthenticated }: MFASectionProps) {
 
   return (
     <div id="mfa-section-container" className="max-w-md w-full mx-auto bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-xl shadow-2xl relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-32 h-32 bg-[#00f3ff]/10 rounded-full blur-3xl -z-10"></div>
-      <div className="absolute bottom-0 right-0 w-32 h-32 bg-[#bc13fe]/10 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute top-0 left-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute bottom-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl -z-10"></div>
 
       <div className="text-center mb-8">
-        <div className="inline-flex p-3 bg-black/40 border border-[#00f3ff]/30 rounded-2xl mb-4 shadow-inner">
-          <ShieldCheck className="w-8 h-8 text-[#00f3ff] animate-pulse" />
+        <div className="inline-flex p-3 bg-black/40 border border-blue-500/30 rounded-2xl mb-4 shadow-inner">
+          <Gamepad2 className="w-8 h-8 text-blue-400" />
         </div>
-        <h2 className="text-xl font-black tracking-tighter uppercase leading-none italic text-[#00f3ff]">
-          BINGO 2060 SECURITY PORTAL
+        <h2 className="text-xl font-bold uppercase leading-none text-white">
+          Join Bingo 2060
         </h2>
-        <p className="text-[10px] tracking-[0.2em] uppercase text-white/50 mt-2 font-mono">
-          Establish cryptographic link to the Base Mainnet X402 rail
+        <p className="text-xs text-white/50 mt-2 font-mono">
+          Connect your wallet to participate on Base Mainnet
         </p>
       </div>
 
@@ -77,8 +77,8 @@ export default function MFASection({ onAuthenticated }: MFASectionProps) {
 
       {!isConnected ? (
         <div className="space-y-4">
-          <label className="block text-[10px] font-bold text-[#00f3ff] uppercase tracking-widest text-center font-mono mb-4">
-            Connect Secure Identity Provider
+          <label className="block text-xs font-bold text-white uppercase tracking-wider text-center mb-4">
+            Connect Your Wallet
           </label>
           
           {connectors.map((connector) => (
@@ -86,37 +86,36 @@ export default function MFASection({ onAuthenticated }: MFASectionProps) {
               key={connector.uid}
               onClick={() => connect({ connector })}
               disabled={isPending}
-              className="w-full flex items-center justify-center gap-2 bg-black/40 border border-white/10 hover:border-[#00f3ff] text-white font-mono text-xs uppercase tracking-widest py-3 px-4 rounded-xl transition-all cursor-pointer shadow-inner"
+              className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl transition-all cursor-pointer shadow"
             >
-              <Key className="w-4 h-4 text-[#00f3ff]" />
-              {isPending ? 'Connecting...' : `Connect with ${connector.name}`}
+              <Wallet className="w-4 h-4" />
+              {isPending ? 'Connecting...' : `Connect ${connector.name}`}
             </button>
           ))}
         </div>
       ) : (
         <div className="space-y-6">
-          <div className="p-3 bg-[#00f3ff]/5 border border-[#00f3ff]/30 rounded-xl text-center">
-            <p className="text-[10px] text-[#00f3ff] font-mono uppercase tracking-widest">Secure Wallet Connected</p>
+          <div className="p-3 bg-blue-500/10 border border-blue-500/30 rounded-xl text-center">
+            <p className="text-xs text-blue-400 font-bold uppercase tracking-wider">Wallet Connected</p>
             <p className="text-xs text-white font-mono mt-1 break-all">{address}</p>
             <button 
               onClick={() => disconnect()}
-              className="mt-2 text-[10px] text-white/50 hover:text-white underline font-mono"
+              className="mt-2 text-xs text-white/50 hover:text-white underline"
             >
               Disconnect
             </button>
           </div>
 
-          <form onSubmit={handleNeuralLink} className="space-y-5">
+          <form onSubmit={handleLogin} className="space-y-5">
             <div>
-              <label className="block text-[10px] font-bold text-[#bc13fe] uppercase tracking-widest mb-2 font-mono">
-                Initialize Neural Handle
+              <label className="block text-xs font-bold text-white uppercase tracking-wider mb-2">
+                Choose a Username
               </label>
               <div className="relative">
-                <Cpu className="absolute left-3 top-3.5 w-4 h-4 text-white/40" />
                 <input
                   type="text"
-                  placeholder="e.g. CyberAthlete_01"
-                  className="w-full bg-black/40 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm focus:border-[#bc13fe] focus:outline-none transition-colors font-mono text-white placeholder-white/30"
+                  placeholder="e.g. Player_01"
+                  className="w-full bg-black/40 border border-white/20 rounded-xl py-3 px-4 text-sm focus:border-blue-500 focus:outline-none transition-colors text-white placeholder-white/40"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required
@@ -127,9 +126,9 @@ export default function MFASection({ onAuthenticated }: MFASectionProps) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-[#00f3ff] to-[#bc13fe] text-black font-black uppercase tracking-widest py-3 px-4 rounded-xl transition-all cursor-pointer font-mono text-xs shadow-[0_0_20px_rgba(0,243,255,0.4)] hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold uppercase tracking-wider py-3 px-4 rounded-xl transition-all cursor-pointer shadow-lg disabled:opacity-50"
             >
-              {loading ? 'CALIBRATING HANDSHAKE...' : 'ESTABLISH NEURAL LINK'}
+              {loading ? 'Joining Game...' : 'Play Now'}
             </button>
           </form>
         </div>

@@ -44,7 +44,7 @@ export default function PaymentConsole({
           <div className="flex items-center gap-2">
             <Wallet className="w-4 h-4 text-[#00f3ff]" />
             <h3 className="font-mono text-sm tracking-widest text-[#00f3ff] uppercase">
-              Base Mainnet X402 Ledger
+              Base Mainnet X402 Ledger (EVM onlys)
             </h3>
           </div>
           <p className="text-xs text-white/50 mt-0.5 font-sans">
