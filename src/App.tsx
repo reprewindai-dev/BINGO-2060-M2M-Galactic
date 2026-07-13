@@ -491,11 +491,6 @@ export default function App() {
   // Sign Legal Waiver covenant
   const handleSignWaiver = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!waiverSignKey.trim() || waiverSignKey.length < 10) {
-      showToast('Neural footprint signature must be at least 10 characters long.', 'warn');
-      return;
-    }
-
     setIsSigningWaiver(true);
     setTimeout(() => {
       localStorage.setItem('bingo2060_waiver_signed', 'true');
@@ -687,19 +682,6 @@ export default function App() {
           </div>
 
           <form onSubmit={handleSignWaiver} className="space-y-4 pt-4 border-t border-white/10">
-            <div className="flex flex-col gap-2">
-              <label className="text-[10px] text-white/50 uppercase tracking-widest">
-                Transmit Neural Footprint (Key signature to bind your AI Agent):
-              </label>
-              <input
-                type="text"
-                value={waiverSignKey}
-                onChange={(e) => setWaiverSignKey(e.target.value)}
-                placeholder="Enter private mnemonic key or signature hash (min 10 chars)..."
-                required
-                className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-xs font-mono text-white placeholder-white/30 focus:outline-none focus:border-red-500 transition-colors"
-              />
-            </div>
 
             <div className="flex items-start gap-2.5">
               <input type="checkbox" id="agree" required className="mt-1 accent-red-500 cursor-pointer" />

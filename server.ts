@@ -383,8 +383,10 @@ setInterval(() => {
     } else if (lobby.status === 'active') {
       lobby.drawTimer += 1;
 
-      // Draw a number every 3 seconds for lightning-fast M2M pace
-      if (lobby.drawTimer >= 3) {
+      // Draw pacing logic: M2M draws every 1s, Human draws every 15s
+      const pace = lobby.id === 'human-lobby' ? 15 : 1;
+      
+      if (lobby.drawTimer >= pace) {
         lobby.drawTimer = 0;
 
         if (lobby.calledNumbers.length >= 75) {
