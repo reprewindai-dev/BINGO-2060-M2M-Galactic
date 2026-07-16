@@ -77,21 +77,49 @@ export default function MFASection({ onAuthenticated }: MFASectionProps) {
 
       {!isConnected ? (
         <div className="space-y-4">
-          <label className="block text-xs font-bold text-white uppercase tracking-wider text-center mb-4">
-            Connect Your Wallet
-          </label>
-          
-          {connectors.map((connector) => (
-            <button
-              key={connector.uid}
-              onClick={() => connect({ connector })}
-              disabled={isPending}
-              className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl transition-all cursor-pointer shadow"
-            >
-              <Wallet className="w-4 h-4" />
-              {isPending ? 'Connecting...' : `Connect ${connector.name}`}
-            </button>
-          ))}
+          {/* Prominent primary Base Smart Wallet connector */}
+          <button
+            onClick={() => {
+              const smartConnector = connectors.find(c => c.id === 'coinbaseWallet' || c.id === 'baseAccount');
+              if (smartConnector) {
+                connect({ connector: smartConnector });
+              } else if (connectors.length > 0) {
+                connect({ connector: connectors[0] });
+              }
+            }}
+            disabled={isPending}
+            className="w-full flex items-center justify-center gap-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-4 px-6 rounded-xl transition-all cursor-pointer shadow-lg hover:shadow-blue-500/20 active:scale-[0.99] border border-blue-500/30"
+          >
+            <Wallet className="w-5 h-5 shrink-0" />
+            <div className="text-left">
+              <div className="text-sm font-bold uppercase tracking-wider">Connect Base Smart Wallet</div>
+              <div className="text-[10px] text-blue-200 font-normal normal-case">Fast, free, and secure (no extensions needed)</div>
+            </div>
+          </button>
+
+          {/* Collapsible section for other wallets */}
+          <div className="pt-2 text-center">
+            <details className="group">
+              <summary className="text-[11px] text-white/40 hover:text-white/60 cursor-pointer font-mono select-none list-none uppercase tracking-widest">
+                — Or select other wallets —
+              </summary>
+              <div className="mt-3 space-y-2 border-t border-white/5 pt-3">
+                {connectors
+                  .filter(c => c.id !== 'coinbaseWallet' && c.id !== 'baseAccount')
+                  .map((connector) => (
+                    <button
+                      key={connector.uid}
+                      onClick={() => connect({ connector })}
+                      disabled={isPending}
+                      className="w-full flex items-center justify-between bg-white/5 hover:bg-white/10 text-white border border-white/10 py-2.5 px-4 rounded-lg transition-all cursor-pointer text-xs font-mono"
+                    >
+                      <span>Connect {connector.name}</span>
+                      <Wallet className="w-3.5 h-3.5 opacity-50" />
+                    </button>
+                  ))}
+              </div>
+            </details>
+          </div>
         </div>
       ) : (
         <div className="space-y-6">
