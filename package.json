@@ -1,7 +1,7 @@
 {
-  "name": "react-example",
+  "name": "bingo-2060-m2m-galactic",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
