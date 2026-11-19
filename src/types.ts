@@ -3,11 +3,27 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+export interface FamilyMemberProfile {
+  id: string;
+  name: string;
+  relation: string;
+  role: 'Primary Operator' | 'Household Member' | 'Youth / Micro-Tier' | 'Autonomous Machine Delegate';
+  walletAddress: string;
+  avatarIcon: string;
+  usdcBalance: number;
+  ethBalance: number;
+  cardiacCoherenceBaseline: number;
+  neuralFrequencyBaseline: number;
+  isMachineDelegate?: boolean;
+}
+
 export interface Player {
   username: string;
   walletAddress: string;
   mfaEnabled: boolean;
   mfaSecret: string;
+  familyProfileId?: string;
+  relationRole?: string;
   performanceMetrics: {
     totalWins: number;
     avgCardiacCoherence: number;
@@ -110,4 +126,23 @@ export interface GlobalJackpotState {
   treasuryCollected: number;
   lastJackpotWinner: string | null;
 }
+
+export interface BingoLineCompletion {
+  id: string;
+  label: string;
+  cells: Array<[number, number]>;
+  numbers: Array<number | 'FREE'>;
+}
+
+export interface BigWinEvent {
+  id: string;
+  completedLines: BingoLineCompletion[];
+  newlyCompletedLines: BingoLineCompletion[];
+  patternMatched: boolean;
+  predictedPattern: string;
+  lobbyName: string;
+  prizePotUSDC: number;
+  triggeredAt: number;
+}
+
 
